@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const { dev } = require("./app-config");
+const config = require("./app-config");
 
-const databaseURL = dev.database.url;
+const databaseURL = config.database.url;
 
 const connectDB = async () => {
     try {
