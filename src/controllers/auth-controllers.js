@@ -9,7 +9,7 @@ module.exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     // Check if user exists
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ $or: [{ email }, { phone }] });
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -94,6 +94,12 @@ module.exports.register = async (req, res) => {
   }
 };
 
-module.exports.forgetPassword = (req, res) => {};
+module.exports.forgetPassword = async (req, res) => {
+  const { email, phone } = req.body;
+  const findUser = await User.findOne({ $or: [{ email }, { phone }] });
+  res.status(200).json({
+    findUser,
+  });
+};
 
 module.exports.resetPassword = (req, res) => {};
