@@ -75,7 +75,9 @@ const productSchema = new mongoose.Schema(
       value: { type: Number, min: [0, "Discount value must be at least 0"] },
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true, // Adds createdAt & updatedAt
+  }
 );
 
 function arrayLimit(val) {
