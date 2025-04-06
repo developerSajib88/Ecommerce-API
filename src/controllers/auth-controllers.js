@@ -6,7 +6,7 @@ const saltRounds = 10;
 
 module.exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, phone, password } = req.body;
 
     // Check if user exists
     const user = await User.findOne({ $or: [{ email }, { phone }] });
@@ -63,7 +63,16 @@ module.exports.login = async (req, res) => {
     });
   }
 };
-module.exports.logout = (req, res) => {};
+
+module.exports.logout = (req, res) => {
+  // Now we know the token was valid
+  // Optionally log user logout using req.user info
+  res.status(200).json({
+    success: true,
+    message: "Logout successful.",
+    data: req.user,
+  });
+};
 
 module.exports.register = async (req, res) => {
   try {
