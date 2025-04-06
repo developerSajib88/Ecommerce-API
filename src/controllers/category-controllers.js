@@ -15,6 +15,7 @@ module.exports.addCategory = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating category:", error.message);
+
     if (error.name === "ValidationError") {
       return res.status(400).json({
         success: false,
