@@ -6,7 +6,11 @@ module.exports.addCategory = async (req, res) => {
   try {
     const { name, image, isActive } = req.body;
 
-    const category = await Category.create({ name, image, isActive });
+    const category = await Category.create({
+      name,
+      image: image.filename,
+      isActive,
+    });
 
     return res.status(201).json({
       success: true,
