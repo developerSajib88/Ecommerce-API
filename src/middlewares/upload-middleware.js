@@ -4,7 +4,7 @@ const path = require("path");
 const uploadTo = (folderName = "") => {
   const storage = multer.diskStorage({
     destination: function (req, file, callBack) {
-      callBack(null, `../uploads/${folderName}/`);
+      callBack(null, `uploads/${folderName}/`);
     },
     filename: function (req, file, callBack) {
       callBack(

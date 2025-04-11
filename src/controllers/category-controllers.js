@@ -4,11 +4,10 @@ module.exports.getAllCategories = (req, res) => {};
 
 module.exports.addCategory = async (req, res) => {
   try {
-    const { name, image, isActive } = req.body;
-
+    const { name, isActive } = req.body;
     const category = await Category.create({
       name,
-      image: image.filename,
+      image: req.file.filename,
       isActive,
     });
 
