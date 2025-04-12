@@ -1,6 +1,22 @@
 const Category = require("../models/category-model");
 
-module.exports.getAllCategories = (req, res) => {};
+module.exports.getAllCategories = async (req, res) => {
+  try {
+    const categories = await Category.find();
+
+    return res.status(200).json({
+      success: true,
+      message: "Categories retrieved successfully.",
+      data: categories,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error retrieving categories.",
+      error: error.message,
+    });
+  }
+};
 
 module.exports.addCategory = async (req, res) => {
   try {
