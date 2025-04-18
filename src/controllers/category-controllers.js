@@ -54,4 +54,29 @@ module.exports.addCategory = async (req, res) => {
   }
 };
 
-module.exports.deleteCategory = (req, res) => {};
+module.exports.deleteCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+
+    const deletedCategory = await Category.findByIdAndDelete(categoryId);
+
+    if (!deletedCategory) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Category deleted successfully.",
+      data: deletedCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while deleting the category.",
+      error: error.message,
+    });
+  }
+};
