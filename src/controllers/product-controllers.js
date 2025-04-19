@@ -73,7 +73,51 @@ module.exports.searchProduct = async (req, res) => {
   }
 };
 
-module.exports.filterProduct = (req, res) => {};
+module.exports.filterProduct = async (req, res) => {
+  try {
+    const {
+      brand,
+      category,
+      minPrice,
+      maxPrice,
+      minRating,
+      maxRating,
+      availability,
+    } = req.query;
+
+    const filter = {};
+
+    if (brand) filter.brand = brand.trim();
+    if (category) filter.category = category.trim();
+    if (availability) filter.availability = availability.trim();
+
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = parseFloat(minPrice);
+      if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
+    }
+
+    if (minRating || maxRating) {
+      filter.rating = {};
+      if (minRating) fliter.rating.$gte = parseFloat(minRating);
+      if (maxRating) filter.rating.$lte = parseFloat(maxRating);
+    }
+
+    const filteredProducts = await Product.find(filter);
+
+    return res.status(200).json({
+      success: true,
+      message: "Filter applied successfully.",
+      data: filteredProducts,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while filtering the products.",
+      error: error.message,
+    });
+  }
+};
 
 module.exports.createProduct = (req, res) => {};
 
