@@ -119,7 +119,32 @@ module.exports.filterProduct = async (req, res) => {
   }
 };
 
-module.exports.createProduct = (req, res) => {};
+module.exports.createProduct = async (req, res) => {
+  try {
+    const productData = { ...req.body };
+
+    // Handle uploaded images
+    if (Array.isArray(req.files) && req.files.length > 0) {
+      productData.images = req.files.map((file) => file.filename);
+    }
+
+    const product = new Product(productData);
+    await product.save(); // no need for .validate(), save() does it
+
+    return res.status(201).json({
+      success: true,
+      message: "Product created successfully",
+      data: product,
+    });
+  } catch (error) {
+    console.error("Error creating product:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
 
 module.exports.updateProduct = (req, res) => {};
 
