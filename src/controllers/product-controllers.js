@@ -1,4 +1,5 @@
 const Product = require("../models/product-model");
+const { options } = require("../routes/product-routes");
 
 module.exports.getAllProducts = async (req, res) => {
   try {
@@ -146,7 +147,50 @@ module.exports.createProduct = async (req, res) => {
   }
 };
 
-module.exports.updateProduct = (req, res) => {};
+module.exports.updateProduct = async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    const productData = { ...req.body };
+
+    if (Array.isArray(req.files) && req.files.length > 0) {
+      productData.images = req.files.map((file) => file.filename);
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      productData,
+      {
+        new: true, // Return the updated product
+        runValidators: true, // Ensure schema validation
+      }
+    );
+
+    // Check if product was found and updated
+    if (!updatedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found!",
+      });
+    }
+
+    // Return success response
+    return res.status(200).json({
+      success: true,
+      message: "Product updated successfully.",
+      data: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Error updating product:", error);
+
+    // Return error response
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while updating the product.",
+      error: error.message,
+    });
+  }
+};
 
 module.exports.deleteProduct = async (req, res) => {
   try {
