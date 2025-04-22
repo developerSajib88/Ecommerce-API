@@ -9,6 +9,7 @@ const {
   deleteProduct,
 } = require("../controllers/product-controllers");
 const uploadTo = require("../middlewares/upload-middleware");
+const { addReview } = require("../controllers/review-controllers");
 const router = express.Router();
 
 router.get("/all", getAllProducts);
@@ -22,5 +23,7 @@ router.put(
   updateProduct
 );
 router.delete("/delete/:id", deleteProduct);
+
+router.post("/review/add/:id", addReview);
 
 module.exports = router;
